@@ -1,7 +1,7 @@
 import { BaseError } from "./BaseError";
 
-export class NotClientError extends BaseError {
+export class DataAlreadyInUser extends BaseError {
   constructor(message: string) {
-    super(message, 402);
+    super(message, 406);
   }
 }
