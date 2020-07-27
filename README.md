@@ -1,1 +1,53 @@
 # Provi-Backend
+```SQL
+-- Tabela do Usuário
+CREATE TABLE User (
+  id VARCHAR(255) PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+```
+```SQL
+-- Tabelas dos dados do Usuário
+CREATE TABLE CPF (
+  id VARCHAR(255) PRIMARY KEY,
+  cpf VARCHAR(255) UNIQUE NOT NULL,
+  update_at BIGINT(20) NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES User (id)
+);
+CREATE TABLE Name (
+  id varchar(255) PRIMARY KEY,
+  first_name VARCHAR(255) UNIQUE NOT NULL,
+  last_name VARCHAR(255) UNIQUE NOT NULL,
+  update_at BIGINT(20) NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES User (id)
+);
+CREATE TABLE Birthday (
+  id VARCHAR(255) PRIMARY KEY,
+  birthday DATE UNIQUE NOT NULL,
+  update_at BIGINT(20) NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES User (id)
+);
+CREATE TABLE PhoneNumber (
+  id VARCHAR(255) PRIMARY KEY,
+  phone_number VARCHAR(15) UNIQUE NOT NULL,
+  update_at BIGINT(20) NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES User (id)
+);
+CREATE TABLE Address (
+  id VARCHAR(255) PRIMARY KEY,
+  cep VARCHAR(10) UNIQUE NOT NULL,
+  street VARCHAR(255) UNIQUE NOT NULL,
+  number SMALLINT UNSIGNED UNIQUE NOT NULL,
+  complement VARCHAR(255) UNIQUE NOT NULL,
+  city VARCHAR(255) UNIQUE NOT NULL,
+  state VARCHAR(2) UNIQUE NOT NULL,
+  update_at BIGINT(20) NOT NULL,
+  user_id VARCHAR(255) NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES User (id)
+);
+```
