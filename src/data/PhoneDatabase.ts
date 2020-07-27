@@ -14,4 +14,27 @@ export class PhoneDatabase extends BaseDatabase {
       )
     )
   }
+  
+  public async getPhoneNumberByValue(value: string): Promise<PhoneNumber | undefined> {
+    const result = await super.getConnection()
+    .select("*")
+    .from(PhoneDatabase.TABLE_NAME)
+    .where({cep: value})
+    .orWhere({street: value})
+    .orWhere({number: Number(value)})
+    .orWhere({complement: value})
+    .orWhere({city: value})
+    .orWhere({state: value})
+
+    return this.toModel(result[0])
+  }
+
+  public async getPhoneNumberByUserId(id: string): Promise<PhoneNumber | undefined>{
+    const result = await super.getConnection()
+    .select("*")
+    .from(PhoneDatabase.TABLE_NAME)
+    .where({user_id: id})
+
+    return this.toModel(result[0])
+  }
 }
