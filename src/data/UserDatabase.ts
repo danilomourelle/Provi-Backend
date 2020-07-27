@@ -14,4 +14,23 @@ export class ProductDatabase extends BaseDatabase {
       )
     )
   }
+
+  public async create(user: User): Promise<void> {
+    await this.getConnection()
+      .insert({
+        id: user.getId(),
+        email: user.getEmail(),
+        password: user.getHash(),
+      })
+      .into(ProductDatabase.TABLE_NAME)
+  }
+
+  public async getUserById(id: string): Promise<User | undefined> {
+    const result = await this.getConnection()
+      .select("*")
+      .from(ProductDatabase.TABLE_NAME)
+      .where({ id })
+
+    return this.toModel(result[0])
+  }
 }
