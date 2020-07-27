@@ -1,7 +1,8 @@
-export class User {
+export class Birthday {
   constructor(
     private id:string,
     private birthday:string,
+    private updateAt: number
   ){}
 
   public getId(): string {
@@ -10,5 +11,9 @@ export class User {
 
   public getBirthday(): string {
     return this.birthday
-  } 
+  }
+
+  public getUpdateAt():number{
+    return this.updateAt
+  }
 }

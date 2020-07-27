@@ -1,7 +1,8 @@
-export class User {
+export class CPF {
   constructor(
     private id:string,
     private cpf:string,
+    private updateAt: number
   ){}
 
   public getId(): string {
@@ -11,4 +12,8 @@ export class User {
   public getCPF(): string {
     return this.cpf
   } 
+
+  public getUpdateAt():number{
+    return this.updateAt
+  }
 }

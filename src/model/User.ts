@@ -2,6 +2,7 @@ export class User {
   constructor(
     private id:string,
     private email:string,
+    private hash: string,
   ){}
 
   public getId(): string {
@@ -10,5 +11,9 @@ export class User {
 
   public getEmail(): string {
     return this.email
-  } 
+  }
+
+  public getHash(): string {
+    return this.hash
+  }
 }

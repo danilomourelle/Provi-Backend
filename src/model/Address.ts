@@ -1,4 +1,4 @@
-export class User {
+export class Address {
   constructor(
     private id:string,
     private cep:string,
@@ -6,7 +6,8 @@ export class User {
     private number: number,
     private complement: string,
     private city: string,
-    private state: string
+    private state: string,
+    private updateAt: number
   ){}
 
   public getId(): string {
@@ -35,5 +36,9 @@ export class User {
 
   public getState(): string{
     return this.state
+  }
+
+  public getUpdateAt():number{
+    return this.updateAt
   }
 }
