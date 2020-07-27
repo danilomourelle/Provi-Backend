@@ -14,4 +14,22 @@ export class CPFDatabase extends BaseDatabase {
       )
     )
   }
+  
+  public async getCPFByValue(value: string): Promise<CPF | undefined> {
+    const result = await super.getConnection()
+    .select("*")
+    .from(CPFDatabase.TABLE_NAME)
+    .where({cpf: value})
+
+    return this.toModel(result[0])
+  }
+
+  public async getCPFByUserId(id: string): Promise<CPF | undefined>{
+    const result = await super.getConnection()
+    .select("*")
+    .from(CPFDatabase.TABLE_NAME)
+    .where({user_id: id})
+
+    return this.toModel(result[0])
+  }
 }
