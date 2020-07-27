@@ -14,4 +14,22 @@ export class BirthdayDatabase extends BaseDatabase {
       )
     )
   }
+  
+  public async getBirthdayByValue(value: string): Promise<Birthday | undefined> {
+    const result = await super.getConnection()
+    .select("*")
+    .from(BirthdayDatabase.TABLE_NAME)
+    .where({birthday: value})
+
+    return this.toModel(result[0])
+  }
+
+  public async getBirthdayByUserId(id: string): Promise<Birthday | undefined>{
+    const result = await super.getConnection()
+    .select("*")
+    .from(BirthdayDatabase.TABLE_NAME)
+    .where({user_id: id})
+
+    return this.toModel(result[0])
+  }
 }
