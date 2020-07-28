@@ -5,4 +5,4 @@ export const phoneRouter = express.Router()
 
 const phone = new PhoneController()
 
-phoneRouter.post('/', phone.inser)
+phoneRouter.post('/', phone.insert)
