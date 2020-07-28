@@ -1,8 +1,9 @@
-export class PhoneNumber {
+export class Phone {
   constructor(
     private id:string,
-    private phoneNumber:string,
+    private phone:string,
     private updateAt: number,
+    private userId:string
   ){}
 
   public getId(): string {
@@ -10,10 +11,14 @@ export class PhoneNumber {
   }
 
   public getPhoneNumber(): string {
-    return this.phoneNumber
+    return this.phone
   } 
 
   public getUpdateAt():number{
     return this.updateAt
+  }
+
+  public getUserId(): string{
+    return this.userId
   }
 }

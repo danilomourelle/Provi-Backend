@@ -2,7 +2,7 @@ import { BaseDatabase } from "./BaseDatabase";
 import { User } from "../model/User";
 
 export class UserDatabase extends BaseDatabase {
-  public static TABLE_NAME: string = 'Product'
+  public static TABLE_NAME: string = 'User'
 
   private toModel(dbModel?: any): User | undefined {
     return (
@@ -15,7 +15,7 @@ export class UserDatabase extends BaseDatabase {
     )
   }
 
-  public async create(user: User): Promise<void> {
+  public async register(user: User): Promise<void> {
     await this.getConnection()
       .insert({
         id: user.getId(),
@@ -23,6 +23,15 @@ export class UserDatabase extends BaseDatabase {
         password: user.getHash(),
       })
       .into(UserDatabase.TABLE_NAME)
+  }
+
+  public async getUserByEmail(email: string): Promise<User | undefined> {
+    const result = await super.getConnection()
+    .select("*")
+    .from(UserDatabase.TABLE_NAME)
+    .where({email})
+
+    return this.toModel(result[0])
   }
 
   public async getUserById(id: string): Promise<User | undefined> {
