@@ -18,6 +18,7 @@ export class NameBusiness {
       throw new InvalidParameterError("Nome inválido")
     }
     const firstName = nameArray.shift()!
+    console.log(nameArray)
     const lastName = nameArray.join(' ')
 
     const newName = new Name(

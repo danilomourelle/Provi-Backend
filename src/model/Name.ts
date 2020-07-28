@@ -16,7 +16,7 @@ export class Name {
   } 
 
   public getLastName(): string {
-    return this.firstName
+    return this.lastName
   } 
 
   public getFullName(): string {

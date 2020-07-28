@@ -2,7 +2,7 @@ import { BaseDatabase } from "./BaseDatabase";
 import { Name } from "../model/Name";
 
 export class NameDatabase extends BaseDatabase {
-  public static TABLE_NAME: string = 'Product'
+  public static TABLE_NAME: string = 'Name'
 
   private toModel(dbModel?: any): Name | undefined {
     return (
