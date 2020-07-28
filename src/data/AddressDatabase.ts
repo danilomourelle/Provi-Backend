@@ -15,11 +15,12 @@ export class AddressDatabase extends BaseDatabase {
         dbModel.complement,
         dbModel.city,
         dbModel.state,
-        dbModel.update_at
+        dbModel.update_at,
+        dbModel.user_id
       )
     )
   }
-  
+
   public async create(address: Address): Promise<void> {
     await this.getConnection()
       .insert({
@@ -30,30 +31,42 @@ export class AddressDatabase extends BaseDatabase {
         complement: address.getComplement(),
         city: address.getCity(),
         state: address.getState(),
-        update_at: address.getUpdateAt()
+        update_at: address.getUpdateAt(),
+        user_id: address.getUserId()
       })
       .into(AddressDatabase.TABLE_NAME)
   }
 
-  public async getAddressByValue(value: string): Promise<Address | undefined> {
+  public async update(newDate: number, addressId: string): Promise<void> {
+    await this.getConnection()
+      .update({
+        update_at: newDate
+      })
+      .into(AddressDatabase.TABLE_NAME)
+      .where({id: addressId})
+  }
+
+  public async getAddressByValue(address: Address): Promise<Address | undefined> {
     const result = await super.getConnection()
-    .select("*")
-    .from(AddressDatabase.TABLE_NAME)
-    .where({cep: value})
-    .orWhere({street: value})
-    .orWhere({number: Number(value)})
-    .orWhere({complement: value})
-    .orWhere({city: value})
-    .orWhere({state: value})
+      .select("*")
+      .from(AddressDatabase.TABLE_NAME)
+      .where({ 
+        cep: address.getCEP(),
+        street: address.getStreet(),
+        number: address.getNumber(),
+        complement: address.getComplement(),
+        city: address.getCity(),
+        state: address.getState(),
+       })
 
     return this.toModel(result[0])
   }
 
-  public async getAddressByUserId(id: string): Promise<Address | undefined>{
+  public async getAddressByUserId(id: string): Promise<Address | undefined> {
     const result = await super.getConnection()
-    .select("*")
-    .from(AddressDatabase.TABLE_NAME)
-    .where({user_id: id})
+      .select("*")
+      .from(AddressDatabase.TABLE_NAME)
+      .where({ user_id: id })
 
     return this.toModel(result[0])
   }

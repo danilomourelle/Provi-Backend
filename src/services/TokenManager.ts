@@ -7,7 +7,16 @@ export class TokenManager {
     });
   }
 
-  public retrieveDataFromToken(token: string): any {
-    return jwt.verify(token, process.env.JWT_KEY as string);
+  public retrieveDataFromToken(token: string): TokenRetrievedData {
+    const data = jwt.verify(token, process.env.JWT_KEY as string) as any;
+    return {
+      id: data.id,
+      email: data.email
+    }
   }
+}
+
+interface TokenRetrievedData {
+  id: string,
+  email: string
 }

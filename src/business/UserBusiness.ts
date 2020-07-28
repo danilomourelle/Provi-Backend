@@ -15,14 +15,20 @@ export class UserBusiness {
     const id = this.idManager.generateId()
     const hash = await this.hashManager.generateHash(password)
 
-    const result = this.userDatabase.getUserByEmail(email)
-    if (result) {
+    const user = await this.userDatabase.getUserByEmail(email)
+    if (user) {
       throw new DataAlreadyInUser("Email já cadastrado")
     }
 
-    const user = new User(id, email, hash)
+    const newUser = new User(id, email, hash)
 
-    await this.userDatabase.register(user)
+    await this.userDatabase.register(newUser)
+
+    return newUser
+  }
+
+  public async getUserById(id:string): Promise<User | undefined>{
+    const user = await this.userDatabase.getUserById(id)
 
     return user
   }

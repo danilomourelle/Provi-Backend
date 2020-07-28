@@ -7,7 +7,8 @@ export class Address {
     private complement: string,
     private city: string,
     private state: string,
-    private updateAt: number
+    private updateAt: number,
+    private userId: string
   ){}
 
   public getId(): string {
@@ -40,5 +41,9 @@ export class Address {
 
   public getUpdateAt():number{
     return this.updateAt
+  }
+
+  public getUserId():string{
+    return this.userId
   }
 }
