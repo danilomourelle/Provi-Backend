@@ -32,13 +32,13 @@ export class AddressBusiness {
       userId
     )
 
-    const address = await this.addressDatabase.getAddressByValue(newAddress)
+    const existingAddress = await this.addressDatabase.getAddressByValue(newAddress)
 
 
-    if (address && address.getUserId() === userId) {
-      await this.addressDatabase.update(Date.now(), address.getId())
+    if (existingAddress && existingAddress.getUserId() === userId) {
+      await this.addressDatabase.update(Date.now(), existingAddress.getId())
     }
-    else if (address && address.getUserId() !== userId) {
+    else if (existingAddress && existingAddress.getUserId() !== userId) {
       throw new DataAlreadyInUser("Endereço utilizado em outro usuário")
     }
     else {

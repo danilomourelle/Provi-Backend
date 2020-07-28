@@ -11,15 +11,36 @@ export class CPFDatabase extends BaseDatabase {
         dbModel.id,
         dbModel.cpf,
         dbModel.update_at,
+        dbModel.user_id
       )
     )
   }
+
+  public async create(cpf: CPF): Promise<void> {
+    await this.getConnection()
+      .insert({
+        id: cpf.getId(),
+        cpf: cpf.getCPF(),
+        update_at: cpf.getUpdateAt(),
+        user_id: cpf.getUserId()
+      })
+      .into(CPFDatabase.TABLE_NAME)
+  }
+
+  public async update(newDate: number, cpfId: string): Promise<void> {
+    await this.getConnection()
+      .update({
+        update_at: newDate
+      })
+      .into(CPFDatabase.TABLE_NAME)
+      .where({id: cpfId})
+  }
   
-  public async getCPFByValue(value: string): Promise<CPF | undefined> {
+  public async getCPFByValue(cpf: CPF): Promise<CPF | undefined> {
     const result = await super.getConnection()
     .select("*")
     .from(CPFDatabase.TABLE_NAME)
-    .where({cpf: value})
+    .where({cpf: cpf.getCPF()})
 
     return this.toModel(result[0])
   }

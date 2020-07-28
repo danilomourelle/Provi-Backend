@@ -9,23 +9,23 @@ export class BirthdayBusiness {
     private idManager: IdManager
   ) { }
 
-  public async insert(inputBirthday: string, userId: string): Promise<void> {
+  public async insert(birthday: string, userId: string): Promise<void> {
     const id = this.idManager.generateId()
 
     const newBirthday = new Birthday(
       id,
-      inputBirthday,
+      birthday,
       Date.now(),
       userId
     )
 
-    const birthday = await this.birthdayDatabase.getBirthdayByValue(newBirthday)
+    const existingBirthday = await this.birthdayDatabase.getBirthdayByValue(newBirthday)
 
 
-    if (birthday && birthday.getUserId() === userId) {
-      await this.birthdayDatabase.update(Date.now(), birthday.getId())
+    if (existingBirthday && existingBirthday.getUserId() === userId) {
+      await this.birthdayDatabase.update(Date.now(), existingBirthday.getId())
     }
-    else if (birthday && birthday.getUserId() !== userId) {
+    else if (existingBirthday && existingBirthday.getUserId() !== userId) {
       throw new DataAlreadyInUser("Endereço utilizado em outro usuário")
     }
     else {
