@@ -43,7 +43,7 @@ export class NameDatabase extends BaseDatabase {
     .select("*")
     .from(NameDatabase.TABLE_NAME)
     .where({first_name: name.getFirstName()})
-    .orWhere({last_name: name.getLastName()})
+    .andWhere({last_name: name.getLastName()})
 
     return this.toModel(result[0])
   }

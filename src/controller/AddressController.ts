@@ -22,7 +22,7 @@ export class AddressController {
     new HashManager()
   )
 
-  async insert(req: Request, res: Response) {
+  public async insert(req: Request, res: Response) {
     try {
       const {
         cep,
