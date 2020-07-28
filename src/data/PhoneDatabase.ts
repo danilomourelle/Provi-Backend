@@ -1,35 +1,51 @@
 import { BaseDatabase } from "./BaseDatabase";
-import { PhoneNumber } from "../model/PhoneNumber";
+import { Phone } from "../model/Phone";
 
 export class PhoneDatabase extends BaseDatabase {
   public static TABLE_NAME: string = 'PhoneNumber'
 
-  private toModel(dbModel?: any): PhoneNumber | undefined {
+  private toModel(dbModel?: any): Phone | undefined {
     return (
       dbModel &&
-      new PhoneNumber(
+      new Phone(
         dbModel.id,
         dbModel.phone_number,
         dbModel.update_at,
+        dbModel.user_id
       )
     )
   }
   
-  public async getPhoneNumberByValue(value: string): Promise<PhoneNumber | undefined> {
+  public async create(phone: Phone): Promise<void> {
+    await this.getConnection()
+      .insert({
+        id: phone.getId(),
+        phone_number: phone.getPhoneNumber(),
+        update_at: phone.getUpdateAt(),
+        user_id: phone.getUserId()
+      })
+      .into(PhoneDatabase.TABLE_NAME)
+  }
+
+  public async update(newDate: number, phoneId: string): Promise<void> {
+    await this.getConnection()
+      .update({
+        update_at: newDate
+      })
+      .into(PhoneDatabase.TABLE_NAME)
+      .where({id: phoneId})
+  }
+  
+  public async getPhoneByValue(phone: Phone): Promise<Phone | undefined> {
     const result = await super.getConnection()
     .select("*")
     .from(PhoneDatabase.TABLE_NAME)
-    .where({cep: value})
-    .orWhere({street: value})
-    .orWhere({number: Number(value)})
-    .orWhere({complement: value})
-    .orWhere({city: value})
-    .orWhere({state: value})
+    .where({phone_number: phone.getPhoneNumber()})
 
     return this.toModel(result[0])
   }
 
-  public async getPhoneNumberByUserId(id: string): Promise<PhoneNumber | undefined>{
+  public async getPhoneByUserId(id: string): Promise<Phone | undefined>{
     const result = await super.getConnection()
     .select("*")
     .from(PhoneDatabase.TABLE_NAME)
