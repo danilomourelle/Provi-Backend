@@ -34,7 +34,7 @@ export class AddressController {
         token
       } = req.body
 
-      if (!cep || !street || !number || !complement || !city || !state || !token) {
+      if (!cep || !street || !number || !city || !state || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
       if (isNaN(number)) {
