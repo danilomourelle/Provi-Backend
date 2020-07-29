@@ -9,9 +9,10 @@ describe("Testing CPFBusiness.insert", () => {
   const userId = 'userId'
   const diffUserId = 'anotherUserId'
 
-  test("Should 'CPF utilizado em outro usuário' for repeated cpf", async () => {
+  test("Should 'Número de CPF inválido' for invalido cpf", async () => {
     expect.assertions(2);
     try {
+      const invalidCPF = '111.444.777-34'
       const idMockValue = 'id'
       const idSpy = jest.fn().mockReturnValue(idMockValue)
       idMockManager = {
@@ -34,11 +35,11 @@ describe("Testing CPFBusiness.insert", () => {
         idMockManager as any,
       );
 
-      await cpfBusiness.insert(cpf, diffUserId);
+      await cpfBusiness.insert(invalidCPF, diffUserId);
 
     } catch (err) {
-      expect(err.errorCode).toBe(406);
-      expect(err.message).toBe("CPF utilizado em outro usuário");
+      expect(err.errorCode).toBe(422);
+      expect(err.message).toBe("Número de CPF inválido");
     }
   });
 

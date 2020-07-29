@@ -2,6 +2,7 @@ import { CPFDatabase } from "../data/CPFDatabase";
 import { IdManager } from "../services/IdManager";
 import { CPF } from "../model/CPF";
 import { DataAlreadyInUser } from "../errors/DataAlreadyInUser";
+import { InvalidParameterError } from "../errors/InvalidParameterError";
 
 export class CPFBusiness {
   constructor(
@@ -18,7 +19,9 @@ export class CPFBusiness {
       Date.now(),
       userId
     )
-
+    if(!newCPF.isValid()){
+      throw new InvalidParameterError("Número de CPF inválido")
+    }
     const existingCPF = await this.cpfDatabase.getCPFByValue(newCPF)
 
     if (existingCPF && existingCPF.getUserId() === userId) {
