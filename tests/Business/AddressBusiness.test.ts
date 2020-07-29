@@ -79,7 +79,7 @@ describe("Testing AddressBusiness.insert", () => {
       userId
     )
     const updateSpy = jest.fn((number: number, addressId: string) => { })
-    const createSpy = jest.fn((number: number, addressId: string) => { })
+    const createSpy = jest.fn((address: Address) => { })
     addressMockDatabase = {
       getAddressByValue: jest.fn((address: Address) => existingAddress),
       update: updateSpy,
@@ -114,7 +114,7 @@ describe("Testing AddressBusiness.insert", () => {
     };
 
     const updateSpy = jest.fn((number: number, addressId: string) => { })
-    const createSpy = jest.fn((number: number, addressId: string) => { })
+    const createSpy = jest.fn((address: Address) => { })
     addressMockDatabase = {
       getAddressByValue: jest.fn((address: Address) => undefined),
       update: updateSpy,
