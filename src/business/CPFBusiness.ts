@@ -19,7 +19,7 @@ export class CPFBusiness {
       Date.now(),
       userId
     )
-    if(!newCPF.validate()){
+    if(!newCPF.isValid()){
       throw new InvalidParameterError("Número de CPF inválido")
     }
     const existingCPF = await this.cpfDatabase.getCPFByValue(newCPF)
