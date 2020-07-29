@@ -167,7 +167,7 @@ describe("Testing AddressController.insert", () => {
     expect(mockRes.send).toHaveBeenCalledWith({ message: "Preencha todos os campos" });
   });
 
-  test("Should return the accessToken in success", async () => {
+  test("Should return the 'message:OK' in success", async () => {
     const mockReq: any = {
       body: {
         cep: '111.222.333-00',
