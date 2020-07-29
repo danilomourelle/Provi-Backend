@@ -11,6 +11,10 @@ import { TokenManager } from "../services/TokenManager";
 import { NotFoundError } from "../errors/NotFoundError";
 
 export class PhoneController {
+  constructor(
+    private tokenManager: TokenManager
+  ){}
+
   private static PhoneBusiness = new PhoneBusiness(
     new PhoneDatabase(),
     new IdManager()
@@ -33,7 +37,7 @@ export class PhoneController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      const userData = new TokenManager().retrieveDataFromToken(token)
+      const userData = this.tokenManager.retrieveDataFromToken(token)
 
       const user = PhoneController.UserBusiness.getUserById(userData.id)
 
