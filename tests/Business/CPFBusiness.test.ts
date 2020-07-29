@@ -4,10 +4,43 @@ import { CPF } from "../../src/model/CPF";
 describe("Testing CPFBusiness.insert", () => {
   let cpfMockDatabase = {};
   let idMockManager = {};
-  const cpf = '2002-02-20'
+  const cpf = '111.444.777-35'
   const createdAt = Date.now()
   const userId = 'userId'
   const diffUserId = 'anotherUserId'
+
+  test("Should 'CPF utilizado em outro usuário' for repeated cpf", async () => {
+    expect.assertions(2);
+    try {
+      const idMockValue = 'id'
+      const idSpy = jest.fn().mockReturnValue(idMockValue)
+      idMockManager = {
+        generateId: idSpy
+      };
+
+      const existingCPF = new CPF(
+        idMockValue,
+        cpf,
+        createdAt,
+        userId
+      )
+
+      cpfMockDatabase = {
+        getCPFByValue: jest.fn((cpf: CPF) => existingCPF)
+      }
+
+      const cpfBusiness = new CPFBusiness(
+        cpfMockDatabase as any,
+        idMockManager as any,
+      );
+
+      await cpfBusiness.insert(cpf, diffUserId);
+
+    } catch (err) {
+      expect(err.errorCode).toBe(406);
+      expect(err.message).toBe("CPF utilizado em outro usuário");
+    }
+  });
 
   test("Should 'CPF utilizado em outro usuário' for repeated cpf", async () => {
     expect.assertions(2);
