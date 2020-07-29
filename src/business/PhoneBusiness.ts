@@ -26,7 +26,7 @@ export class PhoneBusiness {
       await this.phoneDatabase.update(Date.now(), existingPhone.getId())
     }
     else if (existingPhone && existingPhone.getUserId() !== userId) {
-      throw new DataAlreadyInUser("Endereço utilizado em outro usuário")
+      throw new DataAlreadyInUser("Número utilizado em outro usuário")
     }
     else {
       await this.phoneDatabase.create(newPhone)
