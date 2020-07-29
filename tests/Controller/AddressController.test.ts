@@ -32,7 +32,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return 'Preencha todos os campos' for empty street", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "",
         number: "123",
         complement: '',
@@ -55,7 +55,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return 'Preencha todos os campos' for empty number", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "Avenida Brasil",
         number: "",
         complement: '',
@@ -78,7 +78,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return 'Numero inválido' for invalid number", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "Avenida Brasil",
         number: "aaa",
         complement: '',
@@ -101,7 +101,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return 'Preencha todos os campos' for empty city", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "Avenida Brasil",
         number: "123",
         complement: '',
@@ -124,7 +124,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return 'Preencha todos os campos' for empty state", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "Avenida Brasil",
         number: "123",
         complement: '',
@@ -147,7 +147,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return 'Preencha todos os campos' for empty token", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "Avenida Brasil",
         number: "123",
         complement: '',
@@ -170,7 +170,7 @@ describe("Testing AddressController.insert", () => {
   test("Should return the 'message:OK' in success", async () => {
     const mockReq: any = {
       body: {
-        cep: '111.222.333-00',
+        cep: '00000-00',
         street: "Avenida Brasil",
         number: "123",
         complement: '',
