@@ -11,6 +11,10 @@ import { TokenManager } from "../services/TokenManager";
 import { NotFoundError } from "../errors/NotFoundError";
 
 export class CPFController {
+  constructor(
+    private tokenManager: TokenManager
+  ){}
+
   private static CPFBusiness = new CPFBusiness(
     new CPFDatabase(),
     new IdManager()
@@ -30,9 +34,9 @@ export class CPFController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      const userData = new TokenManager().retrieveDataFromToken(token)
+      const userData = this.tokenManager.retrieveDataFromToken(token)
 
-      const user = CPFController.UserBusiness.getUserById(userData.id)
+     const user = CPFController.UserBusiness.getUserById(userData.id)
 
       if(!user){
         throw new NotFoundError("Usuário não encontrado")
