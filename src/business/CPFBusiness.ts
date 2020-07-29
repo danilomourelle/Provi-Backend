@@ -25,7 +25,7 @@ export class CPFBusiness {
       await this.cpfDatabase.update(Date.now(), existingCPF.getId())
     }
     else if (existingCPF && existingCPF.getUserId() !== userId) {
-      throw new DataAlreadyInUser("Endereço utilizado em outro usuário")
+      throw new DataAlreadyInUser("CPF utilizado em outro usuário")
     }
     else {
       await this.cpfDatabase.create(newCPF)

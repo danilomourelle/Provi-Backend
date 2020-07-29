@@ -11,6 +11,9 @@ import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
 
 export class AddressController {
+  constructor(
+    private tokenManager: TokenManager
+  ){}
   private static AddressBusiness = new AddressBusiness(
     new AddressDatabase(),
     new IdManager(),
@@ -38,10 +41,10 @@ export class AddressController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
       if (isNaN(number)) {
-        throw new InvalidParameterError("numero inválido")
+        throw new InvalidParameterError("Numero inválido")
       }
 
-      const userData = new TokenManager().retrieveDataFromToken(token)
+      const userData = this.tokenManager.retrieveDataFromToken(token)
 
       const user = AddressController.UserBusiness.getUserById(userData.id)
 

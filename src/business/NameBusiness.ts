@@ -18,7 +18,6 @@ export class NameBusiness {
       throw new InvalidParameterError("Nome inválido")
     }
     const firstName = nameArray.shift()!
-    console.log(nameArray)
     const lastName = nameArray.join(' ')
 
     const newName = new Name(
@@ -35,7 +34,7 @@ export class NameBusiness {
       await this.nameDatabase.update(Date.now(), existingName.getId())
     }
     else if (existingName && existingName.getUserId() !== userId) {
-      throw new DataAlreadyInUser("Endereço utilizado em outro usuário")
+      throw new DataAlreadyInUser("Nome utilizado em outro usuário")
     }
     else {
       await this.nameDatabase.create(newName)

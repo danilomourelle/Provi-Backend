@@ -26,7 +26,7 @@ export class BirthdayBusiness {
       await this.birthdayDatabase.update(Date.now(), existingBirthday.getId())
     }
     else if (existingBirthday && existingBirthday.getUserId() !== userId) {
-      throw new DataAlreadyInUser("Endereço utilizado em outro usuário")
+      throw new DataAlreadyInUser("Data utilizada em outro usuário")
     }
     else {
       await this.birthdayDatabase.create(newBirthday)

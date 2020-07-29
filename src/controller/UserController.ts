@@ -8,6 +8,10 @@ import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { TokenManager } from "../services/TokenManager";
 
 export class UserController {
+  constructor(
+    private tokenManager: TokenManager,
+  ) { }
+
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
@@ -22,12 +26,12 @@ export class UserController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
       if (email.indexOf("@") === -1) {
-        throw new InvalidParameterError("email inválido")
+        throw new InvalidParameterError("Email inválido")
       }
 
       const user = await UserController.UserBusiness.register(email, password);
 
-      const token = new TokenManager().generateToken({
+      const token = this.tokenManager.generateToken({
         id: user.getId(),
         email: user.getEmail()
       })

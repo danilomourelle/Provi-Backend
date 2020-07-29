@@ -11,6 +11,10 @@ import { TokenManager } from "../services/TokenManager";
 import { NotFoundError } from "../errors/NotFoundError";
 
 export class NameController {
+  constructor(
+    private tokenManager: TokenManager
+  ){}
+
   private static NameBusiness = new NameBusiness(
     new NameDatabase(),
     new IdManager()
@@ -30,7 +34,7 @@ export class NameController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      const userData = new TokenManager().retrieveDataFromToken(token)
+      const userData = this.tokenManager.retrieveDataFromToken(token)
 
       const user = NameController.UserBusiness.getUserById(userData.id)
 

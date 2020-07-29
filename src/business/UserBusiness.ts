@@ -12,13 +12,13 @@ export class UserBusiness {
   ) { }
 
   public async register(email: string, password: string): Promise<User> {
-    const id = this.idManager.generateId()
-    const hash = await this.hashManager.generateHash(password)
-
     const user = await this.userDatabase.getUserByEmail(email)
     if (user) {
       throw new DataAlreadyInUser("Email já cadastrado")
     }
+
+    const id = this.idManager.generateId()
+    const hash = await this.hashManager.generateHash(password)
 
     const newUser = new User(id, email, hash)
 
