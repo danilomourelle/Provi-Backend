@@ -1,15 +1,21 @@
 import { Request, Response } from "express";
 import { BaseDatabase } from "../data/BaseDatabase";
-import { AmountBusiness } from "../business/AmountBusiness";
+import { AddressDatabase } from "../data/AddressDatabase";
 import { AmountDatabase } from "../data/AmountDatabase";
-import { UserBusiness } from "../business/UserBusiness";
+import { BirthdayDatabase } from "../data/BirthdayDatabase";
+import { CPFDatabase } from "../data/CPFDatabase";
+import { NameDatabase } from "../data/NameDatabase";
+import { PhoneDatabase } from "../data/PhoneDatabase";
 import { UserDatabase } from "../data/UserDatabase";
+import { AmountBusiness } from "../business/AmountBusiness";
+import { StepBusiness, Steps } from "../business/StepBusiness";
+import { UserBusiness } from "../business/UserBusiness";
 import { IdManager } from "../services/IdManager";
 import { HashManager } from "../services/HashManager";
-import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { TokenManager } from "../services/TokenManager";
+import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
-
+import { GenericError } from "../errors/GenericError";
 export class AmountController {
   constructor(
     private tokenManager: TokenManager
@@ -23,6 +29,15 @@ export class AmountController {
     new UserDatabase(),
     new IdManager(),
     new HashManager()
+  )
+  
+  private static StepBusiness = new StepBusiness(
+    new AddressDatabase(),
+    new AmountDatabase(),
+    new BirthdayDatabase(),
+    new CPFDatabase(),
+    new NameDatabase(),
+    new PhoneDatabase(),
   )
 
   async insert(req: Request, res: Response) {
@@ -42,6 +57,12 @@ export class AmountController {
 
       if (!user) {
         throw new NotFoundError("Usuário não encontrado")
+      }
+
+      const nextStep = await AmountController.StepBusiness.checkStep(Steps.AMOUNT, userData.id)
+
+      if(!nextStep){
+        throw new GenericError("Você está na etapa errada do cadastro")
       }
 
       await AmountController.AmountBusiness.insert(amount, userData.id)

@@ -38,7 +38,7 @@ export class AddressBusiness {
     const response = await new CEPExternalAPI().checkCEP(newAddress.getCEP())
 
 
-    console.log(response.)
+    // console.log(response.)
 
     const existingAddress = await this.addressDatabase.getAddressByValue(newAddress)
 

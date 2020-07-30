@@ -1,14 +1,21 @@
 import { Request, Response } from "express";
 import { BaseDatabase } from "../data/BaseDatabase";
-import { PhoneBusiness } from "../business/PhoneBusiness";
+import { AddressDatabase } from "../data/AddressDatabase";
+import { AmountDatabase } from "../data/AmountDatabase";
+import { BirthdayDatabase } from "../data/BirthdayDatabase";
+import { CPFDatabase } from "../data/CPFDatabase";
+import { NameDatabase } from "../data/NameDatabase";
 import { PhoneDatabase } from "../data/PhoneDatabase";
-import { UserBusiness } from "../business/UserBusiness";
 import { UserDatabase } from "../data/UserDatabase";
+import { PhoneBusiness } from "../business/PhoneBusiness";
+import { StepBusiness, Steps } from "../business/StepBusiness";
+import { UserBusiness } from "../business/UserBusiness";
 import { IdManager } from "../services/IdManager";
 import { HashManager } from "../services/HashManager";
-import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { TokenManager } from "../services/TokenManager";
+import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
+import { GenericError } from "../errors/GenericError";
 
 export class PhoneController {
   constructor(
@@ -24,6 +31,15 @@ export class PhoneController {
     new UserDatabase(),
     new IdManager(),
     new HashManager()
+  )
+  
+  private static StepBusiness = new StepBusiness(
+    new AddressDatabase(),
+    new AmountDatabase(),
+    new BirthdayDatabase(),
+    new CPFDatabase(),
+    new NameDatabase(),
+    new PhoneDatabase(),
   )
 
   public async insert(req: Request, res: Response) {
@@ -45,12 +61,21 @@ export class PhoneController {
         throw new NotFoundError("Usuário não encontrado")
       }
 
+      const nextStep = await PhoneController.StepBusiness.checkStep(Steps.PHONE, userData.id)
+
+      if(!nextStep){
+        throw new GenericError("Você está na etapa errada do cadastro")
+      }
+
       await PhoneController.PhoneBusiness.insert(
         phone,
         userData.id
       )
 
-      res.status(200).send({ message: "OK" })
+      res.status(200).send({
+        message: "OK", 
+        'next-end-point': nextStep
+        })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });
