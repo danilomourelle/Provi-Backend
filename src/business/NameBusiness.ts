@@ -14,7 +14,7 @@ export class NameBusiness {
     const id = this.idManager.generateId()
 
     const nameArray = name.split(' ')
-    if(nameArray.length < 2){
+    if (nameArray.length < 2) {
       throw new InvalidParameterError("Nome inválido")
     }
     const firstName = nameArray.shift()!

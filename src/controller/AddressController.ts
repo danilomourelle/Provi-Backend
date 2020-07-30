@@ -19,7 +19,7 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class AddressController {
-  
+
   private static AddressBusiness = new AddressBusiness(
     new AddressDatabase(),
     new IdManager(),
@@ -32,7 +32,7 @@ export class AddressController {
     new HashManager(),
     new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -63,7 +63,7 @@ export class AddressController {
 
       const user = await AddressController.UserBusiness.getUserById(token)
 
-      if(!user){
+      if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 

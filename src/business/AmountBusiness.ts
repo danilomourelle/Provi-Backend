@@ -26,7 +26,7 @@ export class AmountBusiness {
       await this.amountDatabase.update(Date.now(), existingAmount.getId())
     }
     else if (existingAmount && existingAmount.getUserId() !== userId) {
-      throw new DataAlreadyInUser("Data utilizada em outro usuário")
+      throw new DataAlreadyInUser("Quantidade pedida em outro usuário")
     }
     else {
       await this.amountDatabase.create(newAmount)

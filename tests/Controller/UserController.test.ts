@@ -58,22 +58,4 @@ describe("Testing UserController.register", () => {
     expect(mockRes.status).toHaveBeenCalledWith(422);
     expect(mockRes.send).toHaveBeenCalledWith({ message: "Email inválido" });
   });
-  test("Should return the accessToken in success", async () => {
-
-    const mockReq: any = {
-      body: {
-        email: 'danilo3@email.com',
-        password: '123456'
-      }
-    }
-    const mockRes: any = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis()
-    }
-
-    await userController.register(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-    expect(mockRes.send).toHaveBeenCalledWith({ token: "tokenResponse" });
-  });
 });

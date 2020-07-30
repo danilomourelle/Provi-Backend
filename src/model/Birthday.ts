@@ -1,10 +1,10 @@
 export class Birthday {
   constructor(
-    private id:string,
-    private birthday:string,
+    private id: string,
+    private birthday: string,
     private updateAt: number,
     private userId: string
-  ){}
+  ) { }
 
   public getId(): string {
     return this.id
@@ -14,11 +14,11 @@ export class Birthday {
     return this.birthday
   }
 
-  public getUpdateAt():number{
+  public getUpdateAt(): number {
     return this.updateAt
   }
 
-  public getUserId(): string{
+  public getUserId(): string {
     return this.userId
   }
 }

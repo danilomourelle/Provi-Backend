@@ -23,14 +23,14 @@ export class CPFController {
     new CPFDatabase(),
     new IdManager()
   )
-  
+
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
     new HashManager(),
     new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -40,25 +40,23 @@ export class CPFController {
     new PhoneDatabase(),
   )
 
-  public async insert(req:Request, res:Response){
-    try{
+  public async insert(req: Request, res: Response) {
+    try {
       const { cpf, token } = req.body
 
-      if(!cpf || !token){
+      if (!cpf || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
-      
+
       const user = await CPFController.UserBusiness.getUserById(token)
 
-      if(!user){
+      if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
       const nextStep = await CPFController.StepBusiness.checkStep(Steps.CPF, user.getId())
 
-      console.log(nextStep)
       if (!nextStep) {
-        console.log('aqui')
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 

@@ -4,9 +4,10 @@ import { Address } from "../../src/model/Address";
 describe("Testing AddressBusiness.insert", () => {
   let addressMockDatabase = {};
   let idMockManager = {};
-  
-  const cep = '00000-00'
-  const street = "Avenida Brasil"
+  let cepMockAPI = {}
+
+  const cep = '01430-000'
+  const street = "Av. Brasil"
   const number = 10
   const complement = ''
   const city = 'São Paulo'
@@ -14,6 +15,43 @@ describe("Testing AddressBusiness.insert", () => {
   const createdAt = Date.now()
   const userId = 'userId'
   const diffUserId = 'anotherUserId'
+
+  test("Should 'CEP e Logradouro não combinam' for cep and street not matching", async () => {
+    expect.assertions(2);
+    try {
+      const idMockValue = 'id'
+      const idSpy = jest.fn().mockReturnValue(idMockValue)
+      idMockManager = {
+        generateId: idSpy
+      };
+
+      const cepResponseMockValue = { logradouro: "Av Sete de Setembro" }
+      const cepSpy = jest.fn().mockReturnValue(cepResponseMockValue)
+      cepMockAPI = {
+        checkCEP: cepSpy
+      }
+
+      const addressBusiness = new AddressBusiness(
+        addressMockDatabase as any,
+        idMockManager as any,
+        cepMockAPI as any
+      );
+
+      await addressBusiness.insert(
+        cep,
+        street,
+        number,
+        complement,
+        city,
+        state,
+        diffUserId
+      );
+
+    } catch (err) {
+      expect(err.errorCode).toBe(422);
+      expect(err.message).toBe("CEP e Logradouro não combinam");
+    }
+  });
 
   test("Should 'Endereço utilizado em outro usuário' for repeated address", async () => {
     expect.assertions(2);
@@ -23,6 +61,12 @@ describe("Testing AddressBusiness.insert", () => {
       idMockManager = {
         generateId: idSpy
       };
+
+      const cepResponseMockValue = { logradouro: "Avenida Brasil" }
+      const cepSpy = jest.fn().mockReturnValue(cepResponseMockValue)
+      cepMockAPI = {
+        checkCEP: cepSpy
+      }
 
       const existingAddress = new Address(
         idMockValue,
@@ -43,6 +87,7 @@ describe("Testing AddressBusiness.insert", () => {
       const addressBusiness = new AddressBusiness(
         addressMockDatabase as any,
         idMockManager as any,
+        cepMockAPI as any
       );
 
       await addressBusiness.insert(
@@ -68,6 +113,12 @@ describe("Testing AddressBusiness.insert", () => {
       generateId: idSpy
     };
 
+    const cepResponseMockValue = { logradouro: "Avenida Brasil" }
+    const cepSpy = jest.fn().mockReturnValue(cepResponseMockValue)
+    cepMockAPI = {
+      checkCEP: cepSpy
+    }
+
     const existingAddress = new Address(
       idMockValue,
       cep,
@@ -90,6 +141,7 @@ describe("Testing AddressBusiness.insert", () => {
     const addressBusiness = new AddressBusiness(
       addressMockDatabase as any,
       idMockManager as any,
+      cepMockAPI as any
     );
 
     await addressBusiness.insert(
@@ -102,6 +154,7 @@ describe("Testing AddressBusiness.insert", () => {
       userId
     );
 
+    expect(cepSpy).toHaveBeenCalledWith(cep)
     expect(updateSpy).toHaveBeenCalledTimes(1);
     expect(createSpy).not.toHaveBeenCalled();
 
@@ -114,6 +167,12 @@ describe("Testing AddressBusiness.insert", () => {
       generateId: idSpy
     };
 
+    const cepResponseMockValue = { logradouro: "Avenida Brasil" }
+    const cepSpy = jest.fn().mockReturnValue(cepResponseMockValue)
+    cepMockAPI = {
+      checkCEP: cepSpy
+    }
+
     const updateSpy = jest.fn((number: number, addressId: string) => { })
     const createSpy = jest.fn((address: Address) => { })
     addressMockDatabase = {
@@ -125,6 +184,7 @@ describe("Testing AddressBusiness.insert", () => {
     const addressBusiness = new AddressBusiness(
       addressMockDatabase as any,
       idMockManager as any,
+      cepMockAPI as any
     );
 
     await addressBusiness.insert(
@@ -137,6 +197,7 @@ describe("Testing AddressBusiness.insert", () => {
       userId
     );
 
+    expect(cepSpy).toHaveBeenCalledWith(cep)
     expect(createSpy).toHaveBeenCalledTimes(1);
     expect(updateSpy).not.toHaveBeenCalled();
   });
