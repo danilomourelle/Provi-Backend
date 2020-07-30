@@ -27,7 +27,7 @@ export class UserBusiness {
     return newUser
   }
 
-  public async getUserById(id:string): Promise<User | undefined>{
+  public async getUserById(id: string): Promise<User | undefined> {
     const user = await this.userDatabase.getUserById(id)
 
     return user
