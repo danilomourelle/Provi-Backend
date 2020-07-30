@@ -4,8 +4,6 @@ import { TokenManager } from "../services/TokenManager";
 
 export const amountRouter = express.Router()
 
-const amount = new AmountController(
-  new TokenManager()
-)
+const amount = new AmountController()
 
 amountRouter.post('/', amount.insert)

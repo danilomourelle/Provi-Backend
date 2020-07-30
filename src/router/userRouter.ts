@@ -4,8 +4,6 @@ import { TokenManager } from "../services/TokenManager";
 
 export const userRouter = express.Router()
 
-const user = new UserController(
-  new TokenManager(),
-)
+const user = new UserController()
 
 userRouter.post('/register', user.register)

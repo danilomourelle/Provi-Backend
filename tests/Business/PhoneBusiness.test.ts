@@ -4,6 +4,7 @@ import { Phone } from "../../src/model/Phone";
 describe("Testing PhoneBusiness.insert", () => {
   let phoneMockDatabase = {};
   let idMockManager = {};
+  
   const phone = '(11) 9 8888-7777'
   const createdAt = Date.now()
   const userId = 'userId'

@@ -1,7 +1,7 @@
 export class Address {
   constructor(
-    private id: string,
-    private cep: string,
+    private id:string,
+    private cep:string,
     private street: string,
     private number: number,
     private complement: string,
@@ -9,7 +9,7 @@ export class Address {
     private state: string,
     private updateAt: number,
     private userId: string
-  ) { }
+  ){}
 
   public getId(): string {
     return this.id
@@ -17,7 +17,7 @@ export class Address {
 
   public getCEP(): string {
     return this.cep
-  }
+  } 
 
   public getStreet(): string {
     return this.street
@@ -27,23 +27,23 @@ export class Address {
     return this.number
   }
 
-  public getComplement(): string {
+  public getComplement(): string{
     return this.complement
   }
 
-  public getCity(): string {
+  public getCity(): string{
     return this.city
   }
 
-  public getState(): string {
+  public getState(): string{
     return this.state
   }
 
-  public getUpdateAt(): number {
+  public getUpdateAt():number{
     return this.updateAt
   }
 
-  public getUserId(): string {
+  public getUserId():string{
     return this.userId
   }
 }

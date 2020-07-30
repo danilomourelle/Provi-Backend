@@ -18,21 +18,19 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class CPFController {
-  constructor(
-    private tokenManager: TokenManager
-  ) { }
 
   private static CPFBusiness = new CPFBusiness(
     new CPFDatabase(),
     new IdManager()
   )
-
+  
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
   )
-
+  
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -42,34 +40,33 @@ export class CPFController {
     new PhoneDatabase(),
   )
 
-  public async insert(req: Request, res: Response) {
-    try {
+  public async insert(req:Request, res:Response){
+    try{
       const { cpf, token } = req.body
 
-      if (!cpf || !token) {
+      if(!cpf || !token){
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      const userData = this.tokenManager.retrieveDataFromToken(token)
 
-      const user = CPFController.UserBusiness.getUserById(userData.id)
+     const user = await CPFController.UserBusiness.getUserById(token)
 
-      if (!user) {
+      if(!user){
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await CPFController.StepBusiness.checkStep(Steps.CPF, userData.id)
+      const nextStep = await CPFController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
-      if(!nextStep){
+      if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
-      await CPFController.CPFBusiness.insert(cpf, userData.id)
+      await CPFController.CPFBusiness.insert(cpf, user.getId())
 
       res.status(200).send({
-         message: "OK", 
-         'next-end-point': nextStep
-         })
+        message: "OK",
+        'next-end-point': nextStep
+      })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

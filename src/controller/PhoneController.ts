@@ -18,9 +18,6 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class PhoneController {
-  constructor(
-    private tokenManager: TokenManager
-  ) { }
 
   private static PhoneBusiness = new PhoneBusiness(
     new PhoneDatabase(),
@@ -30,9 +27,10 @@ export class PhoneController {
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -53,29 +51,24 @@ export class PhoneController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      const userData = this.tokenManager.retrieveDataFromToken(token)
-
-      const user = PhoneController.UserBusiness.getUserById(userData.id)
+      const user = await PhoneController.UserBusiness.getUserById(token)
 
       if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await PhoneController.StepBusiness.checkStep(Steps.PHONE, userData.id)
+      const nextStep = await PhoneController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
-      if(!nextStep){
+      if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
-      await PhoneController.PhoneBusiness.insert(
-        phone,
-        userData.id
-      )
+      await PhoneController.PhoneBusiness.insert(phone, user.getId())
 
       res.status(200).send({
-        message: "OK", 
+        message: "OK",
         'next-end-point': nextStep
-        })
+      })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

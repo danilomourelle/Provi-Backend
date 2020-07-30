@@ -10,7 +10,7 @@ export class CPFBusiness {
     private idManager: IdManager
   ) { }
 
-  public async insert(cpf: string, userId: string): Promise<void> {
+  public async insert(cpf: string, userId:string): Promise<void>{
     const id = this.idManager.generateId()
 
     const newCPF = new CPF(
@@ -19,7 +19,7 @@ export class CPFBusiness {
       Date.now(),
       userId
     )
-    if (!newCPF.isValid()) {
+    if(!newCPF.isValid()){
       throw new InvalidParameterError("Número de CPF inválido")
     }
     const existingCPF = await this.cpfDatabase.getCPFByValue(newCPF)

@@ -18,21 +18,19 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class AddressController {
-  constructor(
-    private tokenManager: TokenManager
-  ) { }
-
+  
   private static AddressBusiness = new AddressBusiness(
     new AddressDatabase(),
-    new IdManager(),
+    new IdManager()
   )
 
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
   )
-
+  
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -53,6 +51,7 @@ export class AddressController {
         state,
         token
       } = req.body
+
       if (!cep || !street || !number || !city || !state || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
@@ -60,17 +59,15 @@ export class AddressController {
         throw new InvalidParameterError("Numero inválido")
       }
 
-      const userData = this.tokenManager.retrieveDataFromToken(token)
+      const user = await AddressController.UserBusiness.getUserById(token)
 
-      const user = AddressController.UserBusiness.getUserById(userData.id)
-
-      if (!user) {
+      if(!user){
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await AddressController.StepBusiness.checkStep(Steps.ADDRESS, userData.id)
+      const nextStep = await AddressController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
-      if(!nextStep){
+      if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
@@ -81,13 +78,13 @@ export class AddressController {
         complement,
         city,
         state,
-        'userData.id'
+        user.getId()
       )
 
       res.status(200).send({
-        message: "OK", 
+        message: "OK",
         'next-end-point': nextStep
-        })
+      })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

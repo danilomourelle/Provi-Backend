@@ -4,8 +4,7 @@ import { TokenManager } from "../services/TokenManager";
 
 export const birthdayRouter = express.Router()
 
-const birthday = new BirthdayController(
-  new TokenManager()
-)
+const birthday = new BirthdayController()
+
 
 birthdayRouter.post('/', birthday.insert)

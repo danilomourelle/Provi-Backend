@@ -33,23 +33,23 @@ export class BirthdayDatabase extends BaseDatabase {
         update_at: newDate
       })
       .into(BirthdayDatabase.TABLE_NAME)
-      .where({ id: birthdayId })
+      .where({id: birthdayId})
   }
-
+  
   public async getBirthdayByValue(birthday: Birthday): Promise<Birthday | undefined> {
     const result = await super.getConnection()
-      .select("*")
-      .from(BirthdayDatabase.TABLE_NAME)
-      .where({ birthday: birthday.getBirthday() })
+    .select("*")
+    .from(BirthdayDatabase.TABLE_NAME)
+    .where({birthday: birthday.getBirthday()})
 
     return this.toModel(result[0])
   }
 
-  public async getBirthdayByUserId(id: string): Promise<Birthday | undefined> {
+  public async getBirthdayByUserId(id: string): Promise<Birthday | undefined>{
     const result = await super.getConnection()
-      .select("*")
-      .from(BirthdayDatabase.TABLE_NAME)
-      .where({ user_id: id })
+    .select("*")
+    .from(BirthdayDatabase.TABLE_NAME)
+    .where({user_id: id})
 
     return this.toModel(result[0])
   }

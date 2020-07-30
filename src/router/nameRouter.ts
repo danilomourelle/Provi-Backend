@@ -4,8 +4,6 @@ import { TokenManager } from "../services/TokenManager";
 
 export const nameRouter = express.Router()
 
-const name = new NameController(
-  new TokenManager()
-)
+const name = new NameController()
 
 nameRouter.post('/', name.insert)

@@ -43,21 +43,21 @@ export class AddressDatabase extends BaseDatabase {
         update_at: newDate
       })
       .into(AddressDatabase.TABLE_NAME)
-      .where({ id: addressId })
+      .where({id: addressId})
   }
 
   public async getAddressByValue(address: Address): Promise<Address | undefined> {
     const result = await super.getConnection()
       .select("*")
       .from(AddressDatabase.TABLE_NAME)
-      .where({
+      .where({ 
         cep: address.getCEP(),
         street: address.getStreet(),
         number: address.getNumber(),
         complement: address.getComplement(),
         city: address.getCity(),
         state: address.getState(),
-      })
+       })
 
     return this.toModel(result[0])
   }

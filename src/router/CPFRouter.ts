@@ -4,8 +4,6 @@ import { TokenManager } from "../services/TokenManager";
 
 export const cpfRouter = express.Router()
 
-const cpf = new CPFController(
-  new TokenManager()
-)
+const cpf = new CPFController()
 
 cpfRouter.post('/', cpf.insert)

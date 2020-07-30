@@ -16,10 +16,9 @@ import { TokenManager } from "../services/TokenManager";
 import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
+
 export class AmountController {
-  constructor(
-    private tokenManager: TokenManager
-  ) { }
+
   private static AmountBusiness = new AmountBusiness(
     new AmountDatabase(),
     new IdManager()
@@ -28,9 +27,10 @@ export class AmountController {
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -51,23 +51,24 @@ export class AmountController {
         throw new InvalidParameterError("Valor solicitado inválido")
       }
 
-      const userData = this.tokenManager.retrieveDataFromToken(token)
-
-      const user = AmountController.UserBusiness.getUserById(userData.id)
+      const user = await AmountController.UserBusiness.getUserById(token)
 
       if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await AmountController.StepBusiness.checkStep(Steps.AMOUNT, userData.id)
+      const nextStep = await AmountController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
-      if(!nextStep){
+      if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
-      await AmountController.AmountBusiness.insert(amount, userData.id)
+      await AmountController.AmountBusiness.insert(amount, user.getId())
 
-      res.status(200).send({ message: "OK" })
+      res.status(200).send({
+        message: "OK",
+        'next-end-point': nextStep
+      })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

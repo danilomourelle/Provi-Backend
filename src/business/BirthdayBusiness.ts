@@ -1,6 +1,6 @@
 import { BirthdayDatabase } from "../data/BirthdayDatabase";
-import { Birthday } from "../model/Birthday";
 import { IdManager } from "../services/IdManager";
+import { Birthday } from "../model/Birthday";
 import { DataAlreadyInUser } from "../errors/DataAlreadyInUser";
 
 export class BirthdayBusiness {

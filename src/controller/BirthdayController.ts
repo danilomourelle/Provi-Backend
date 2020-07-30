@@ -18,10 +18,7 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class BirthdayController {
-  constructor(
-    public tokenManager: TokenManager,
-  ) { }
-
+  
   private static BirthdayBusiness = new BirthdayBusiness(
     new BirthdayDatabase(),
     new IdManager()
@@ -30,7 +27,8 @@ export class BirthdayController {
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
   )
   
   private static StepBusiness = new StepBusiness(
@@ -50,23 +48,21 @@ export class BirthdayController {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      console.log(BirthdayController.BirthdayBusiness)
-      const userData = this.tokenManager.retrieveDataFromToken(token)
-      const user = BirthdayController.UserBusiness.getUserById(userData.id)
+      const user = await BirthdayController.UserBusiness.getUserById(token)
 
       if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await BirthdayController.StepBusiness.checkStep(Steps.BIRTHDAY, userData.id)
+      const nextStep = await BirthdayController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
-      if(!nextStep){
+      if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
       // !Assumindo que data está chegando no formato YYYY-MM-DD
-      await BirthdayController.BirthdayBusiness.insert(birthday, userData.id)
- 
+      await BirthdayController.BirthdayBusiness.insert(birthday, user.getId())
+
       res.status(200).send({
         message: "OK",
         'next-end-point': nextStep

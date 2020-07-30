@@ -24,7 +24,7 @@ export class CPF {
 
   // Formula adaptada de https://www.geradorcpf.com/javascript-validar-cpf.htm / http://www.gerardocumentos.com.br/?pg=entenda-a-formula-do-cpf
   public isValid(): boolean {
-    const cpf: string = this.cpf.replace(/[^\d]+/g, '');
+    const cpf:string = this.cpf.replace(/[^\d]+/g, '');
 
     if (cpf.length != 11)
       return false;

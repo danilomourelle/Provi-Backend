@@ -33,23 +33,23 @@ export class CPFDatabase extends BaseDatabase {
         update_at: newDate
       })
       .into(CPFDatabase.TABLE_NAME)
-      .where({ id: cpfId })
+      .where({id: cpfId})
   }
-
+  
   public async getCPFByValue(cpf: CPF): Promise<CPF | undefined> {
     const result = await super.getConnection()
-      .select("*")
-      .from(CPFDatabase.TABLE_NAME)
-      .where({ cpf: cpf.getCPF() })
+    .select("*")
+    .from(CPFDatabase.TABLE_NAME)
+    .where({cpf: cpf.getCPF()})
 
     return this.toModel(result[0])
   }
 
-  public async getCPFByUserId(id: string): Promise<CPF | undefined> {
+  public async getCPFByUserId(id: string): Promise<CPF | undefined>{
     const result = await super.getConnection()
-      .select("*")
-      .from(CPFDatabase.TABLE_NAME)
-      .where({ user_id: id })
+    .select("*")
+    .from(CPFDatabase.TABLE_NAME)
+    .where({user_id: id})
 
     return this.toModel(result[0])
   }

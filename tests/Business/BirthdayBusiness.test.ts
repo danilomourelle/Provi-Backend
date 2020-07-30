@@ -4,6 +4,7 @@ import { Birthday } from "../../src/model/Birthday";
 describe("Testing BirthdayBusiness.insert", () => {
   let birthdayMockDatabase = {};
   let idMockManager = {};
+  
   const birthday = '2002-02-20'
   const createdAt = Date.now()
   const userId = 'userId'

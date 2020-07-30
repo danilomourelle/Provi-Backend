@@ -18,9 +18,6 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class NameController {
-  constructor(
-    private tokenManager: TokenManager
-  ) { }
 
   private static NameBusiness = new NameBusiness(
     new NameDatabase(),
@@ -30,7 +27,8 @@ export class NameController {
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
   )
   
   private static StepBusiness = new StepBusiness(
@@ -44,32 +42,31 @@ export class NameController {
 
   public async insert(req: Request, res: Response) {
     try {
-      const { name, token } = req.body
+      const {name, token} = req.body
 
-      if (!name || !token) {
+      if(!name || !token){
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
-      const userData = this.tokenManager.retrieveDataFromToken(token)
 
-      const user = NameController.UserBusiness.getUserById(userData.id)
+      const user = await NameController.UserBusiness.getUserById(token)
 
-      if (!user) {
+      if(!user){
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await NameController.StepBusiness.checkStep(Steps.NAME, userData.id)
+      const nextStep = await NameController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
-      if(!nextStep){
+      if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
-      await NameController.NameBusiness.insert(name, userData.id)
+      await NameController.NameBusiness.insert(name, user.getId())
 
       res.status(200).send({
-        message: "OK", 
+        message: "OK",
         'next-end-point': nextStep
-        })
+      })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

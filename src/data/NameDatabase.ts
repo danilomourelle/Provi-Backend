@@ -35,24 +35,24 @@ export class NameDatabase extends BaseDatabase {
         update_at: newDate
       })
       .into(NameDatabase.TABLE_NAME)
-      .where({ id: nameId })
+      .where({id: nameId})
   }
-
+  
   public async getNameByValue(name: Name): Promise<Name | undefined> {
     const result = await super.getConnection()
-      .select("*")
-      .from(NameDatabase.TABLE_NAME)
-      .where({ first_name: name.getFirstName() })
-      .andWhere({ last_name: name.getLastName() })
+    .select("*")
+    .from(NameDatabase.TABLE_NAME)
+    .where({first_name: name.getFirstName()})
+    .andWhere({last_name: name.getLastName()})
 
     return this.toModel(result[0])
   }
 
-  public async getNameByUserId(id: string): Promise<Name | undefined> {
+  public async getNameByUserId(id: string): Promise<Name | undefined>{
     const result = await super.getConnection()
-      .select("*")
-      .from(NameDatabase.TABLE_NAME)
-      .where({ user_id: id })
+    .select("*")
+    .from(NameDatabase.TABLE_NAME)
+    .where({user_id: id})
 
     return this.toModel(result[0])
   }

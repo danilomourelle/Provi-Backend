@@ -4,6 +4,7 @@ import { CPF } from "../../src/model/CPF";
 describe("Testing CPFBusiness.insert", () => {
   let cpfMockDatabase = {};
   let idMockManager = {};
+  
   const cpf = '111.444.777-35'
   const createdAt = Date.now()
   const userId = 'userId'
