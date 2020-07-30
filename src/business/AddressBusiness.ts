@@ -4,6 +4,7 @@ import { Address } from "../model/Address";
 import { DataAlreadyInUser } from "../errors/DataAlreadyInUser";
 import { TokenManager } from "../services/TokenManager";
 import { CEPExternalAPI } from "../services/CEPExternalAPI";
+import { InvalidParameterError } from "../errors/InvalidParameterError";
 
 export class AddressBusiness {
   constructor(
@@ -35,8 +36,21 @@ export class AddressBusiness {
     )
 
     const response = await new CEPExternalAPI().checkCEP(newAddress.getCEP())
+    const streetParts = street.replace(/\s{2,}|\. |-/g, ' ').split(' ')
+    let matches = 0
+    for (const part of streetParts) {
+      if (part && response.logradouro.includes(part)) {
+        matches++
+      }
+    }
 
-    console.log(response)
+    console.log(matches)
+    console.log(response.logradouro)
+    console.log(streetParts)
+
+    if (matches < 2) {
+      throw new InvalidParameterError("CEP e Logradouro não combinam")
+    }
 
     const existingAddress = await this.addressDatabase.getAddressByValue(newAddress)
 
