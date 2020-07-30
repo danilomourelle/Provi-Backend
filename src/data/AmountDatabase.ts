@@ -33,23 +33,23 @@ export class AmountDatabase extends BaseDatabase {
         update_at: newDate
       })
       .into(AmountDatabase.TABLE_NAME)
-      .where({id: amountId})
+      .where({ id: amountId })
   }
-  
+
   public async getAmountByValue(amount: Amount): Promise<Amount | undefined> {
     const result = await super.getConnection()
-    .select("*")
-    .from(AmountDatabase.TABLE_NAME)
-    .where({amount: amount.getAmount()})
+      .select("*")
+      .from(AmountDatabase.TABLE_NAME)
+      .where({ amount: amount.getAmount() })
 
     return this.toModel(result[0])
   }
 
-  public async getAmountByUserId(id: string): Promise<Amount | undefined>{
+  public async getAmountByUserId(id: string): Promise<Amount | undefined> {
     const result = await super.getConnection()
-    .select("*")
-    .from(AmountDatabase.TABLE_NAME)
-    .where({user_id: id})
+      .select("*")
+      .from(AmountDatabase.TABLE_NAME)
+      .where({ user_id: id })
 
     return this.toModel(result[0])
   }

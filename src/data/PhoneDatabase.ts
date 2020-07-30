@@ -15,7 +15,7 @@ export class PhoneDatabase extends BaseDatabase {
       )
     )
   }
-  
+
   public async create(phone: Phone): Promise<void> {
     await this.getConnection()
       .insert({
@@ -33,23 +33,23 @@ export class PhoneDatabase extends BaseDatabase {
         update_at: newDate
       })
       .into(PhoneDatabase.TABLE_NAME)
-      .where({id: phoneId})
+      .where({ id: phoneId })
   }
-  
+
   public async getPhoneByValue(phone: Phone): Promise<Phone | undefined> {
     const result = await super.getConnection()
-    .select("*")
-    .from(PhoneDatabase.TABLE_NAME)
-    .where({phone_number: phone.getPhoneNumber()})
+      .select("*")
+      .from(PhoneDatabase.TABLE_NAME)
+      .where({ phone_number: phone.getPhoneNumber() })
 
     return this.toModel(result[0])
   }
 
-  public async getPhoneByUserId(id: string): Promise<Phone | undefined>{
+  public async getPhoneByUserId(id: string): Promise<Phone | undefined> {
     const result = await super.getConnection()
-    .select("*")
-    .from(PhoneDatabase.TABLE_NAME)
-    .where({user_id: id})
+      .select("*")
+      .from(PhoneDatabase.TABLE_NAME)
+      .where({ user_id: id })
 
     return this.toModel(result[0])
   }
