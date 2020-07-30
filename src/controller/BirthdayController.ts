@@ -54,7 +54,7 @@ export class BirthdayController {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await BirthdayController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
+      const nextStep = await BirthdayController.StepBusiness.checkStep(Steps.BIRTHDAY, user.getId())
 
       if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
