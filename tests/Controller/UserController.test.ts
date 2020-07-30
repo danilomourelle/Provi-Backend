@@ -1,13 +1,8 @@
 import { Response } from "express";
 import { UserController } from '../../src/controller/UserController'
 
-// !Para testar condição de sucesso, deve-se comentar linhas de comunicação com DB e respostas associadas no arquivo do controller (32,35,36)
-
-
 describe("Testing UserController.register", () => {
-  let tokenGenerator = { generateToken: jest.fn().mockReturnValue('tokenResponse') };
-  
-  const userController = new UserController(tokenGenerator as any)
+  const userController = new UserController()
 
   test("Should return 'Preencha todos os campos' for empty email", async () => {
 
