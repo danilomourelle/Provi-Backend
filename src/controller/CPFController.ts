@@ -56,9 +56,7 @@ export class CPFController {
 
       const nextStep = await CPFController.StepBusiness.checkStep(Steps.CPF, user.getId())
 
-      console.log(nextStep)
       if (!nextStep) {
-        console.log('aqui')
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
