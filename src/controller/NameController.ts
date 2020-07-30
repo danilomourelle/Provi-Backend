@@ -30,7 +30,7 @@ export class NameController {
     new HashManager(),
     new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -42,16 +42,16 @@ export class NameController {
 
   public async insert(req: Request, res: Response) {
     try {
-      const {name, token} = req.body
+      const { name, token } = req.body
 
-      if(!name || !token){
+      if (!name || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
 
       const user = await NameController.UserBusiness.getUserById(token)
 
-      if(!user){
+      if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 

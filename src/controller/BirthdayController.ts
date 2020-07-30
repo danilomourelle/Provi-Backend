@@ -18,7 +18,7 @@ import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
 export class BirthdayController {
-  
+
   private static BirthdayBusiness = new BirthdayBusiness(
     new BirthdayDatabase(),
     new IdManager()
@@ -30,7 +30,7 @@ export class BirthdayController {
     new HashManager(),
     new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
