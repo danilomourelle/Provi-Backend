@@ -13,6 +13,7 @@ import { UserBusiness } from "../business/UserBusiness";
 import { IdManager } from "../services/IdManager";
 import { HashManager } from "../services/HashManager";
 import { TokenManager } from "../services/TokenManager";
+import { CEPExternalAPI } from "../services/CEPExternalAPI";
 import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
@@ -21,7 +22,8 @@ export class AddressController {
   
   private static AddressBusiness = new AddressBusiness(
     new AddressDatabase(),
-    new IdManager()
+    new IdManager(),
+    new CEPExternalAPI()
   )
 
   private static UserBusiness = new UserBusiness(

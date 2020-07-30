@@ -9,7 +9,8 @@ import { InvalidParameterError } from "../errors/InvalidParameterError";
 export class AddressBusiness {
   constructor(
     private addressDatabase: AddressDatabase,
-    private idManager: IdManager
+    private idManager: IdManager,
+    private cepExternaAPI: CEPExternalAPI
   ) { }
 
   public async insert(
@@ -35,7 +36,7 @@ export class AddressBusiness {
       userId
     )
 
-    const response = await new CEPExternalAPI().checkCEP(newAddress.getCEP())
+    const response = await this.cepExternaAPI.checkCEP(newAddress.getCEP())
     const streetParts = street.replace(/\s{2,}|\. |-/g, ' ').split(' ')
     let matches = 0
     for (const part of streetParts) {
@@ -43,10 +44,6 @@ export class AddressBusiness {
         matches++
       }
     }
-
-    console.log(matches)
-    console.log(response.logradouro)
-    console.log(streetParts)
 
     if (matches < 2) {
       throw new InvalidParameterError("CEP e Logradouro não combinam")
