@@ -47,17 +47,18 @@ export class CPFController {
       if(!cpf || !token){
         throw new InvalidParameterError("Preencha todos os campos")
       }
-
-
-     const user = await CPFController.UserBusiness.getUserById(token)
+      
+      const user = await CPFController.UserBusiness.getUserById(token)
 
       if(!user){
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await CPFController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
+      const nextStep = await CPFController.StepBusiness.checkStep(Steps.CPF, user.getId())
 
+      console.log(nextStep)
       if (!nextStep) {
+        console.log('aqui')
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 

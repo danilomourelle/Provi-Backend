@@ -3,6 +3,7 @@ import { IdManager } from "../services/IdManager";
 import { Address } from "../model/Address";
 import { DataAlreadyInUser } from "../errors/DataAlreadyInUser";
 import { TokenManager } from "../services/TokenManager";
+import { CEPExternalAPI } from "../services/CEPExternalAPI";
 
 export class AddressBusiness {
   constructor(
@@ -32,6 +33,10 @@ export class AddressBusiness {
       Date.now(),
       userId
     )
+
+    const response = await new CEPExternalAPI().checkCEP(newAddress.getCEP())
+
+    console.log(response)
 
     const existingAddress = await this.addressDatabase.getAddressByValue(newAddress)
 

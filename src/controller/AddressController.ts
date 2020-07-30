@@ -65,7 +65,7 @@ export class AddressController {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await AddressController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
+      const nextStep = await AddressController.StepBusiness.checkStep(Steps.ADDRESS, user.getId())
 
       if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")

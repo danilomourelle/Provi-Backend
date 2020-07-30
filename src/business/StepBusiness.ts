@@ -24,7 +24,6 @@ export class StepBusiness {
 
   public async checkStep(actualStep: string, userId: string): Promise<string> {
     this.setNextStep('')
-
     switch (actualStep) {
       case Steps.CPF:
         this.setNextStep(Steps.NAME)

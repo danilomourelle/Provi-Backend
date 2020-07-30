@@ -57,7 +57,7 @@ export class PhoneController {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await PhoneController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
+      const nextStep = await PhoneController.StepBusiness.checkStep(Steps.PHONE, user.getId())
 
       if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
