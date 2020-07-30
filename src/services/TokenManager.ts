@@ -16,7 +16,7 @@ export class TokenManager {
   }
 }
 
-interface TokenRetrievedData {
+export interface TokenRetrievedData {
   id: string,
   email: string
 }

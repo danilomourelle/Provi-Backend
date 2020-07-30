@@ -1,28 +1,43 @@
 import { Request, Response } from "express";
 import { BaseDatabase } from "../data/BaseDatabase";
-import { AddressBusiness } from "../business/AddressBusiness";
 import { AddressDatabase } from "../data/AddressDatabase";
-import { UserBusiness } from "../business/UserBusiness";
+import { AmountDatabase } from "../data/AmountDatabase";
+import { BirthdayDatabase } from "../data/BirthdayDatabase";
+import { CPFDatabase } from "../data/CPFDatabase";
+import { NameDatabase } from "../data/NameDatabase";
+import { PhoneDatabase } from "../data/PhoneDatabase";
 import { UserDatabase } from "../data/UserDatabase";
+import { AddressBusiness } from "../business/AddressBusiness";
+import { StepBusiness, Steps } from "../business/StepBusiness";
+import { UserBusiness } from "../business/UserBusiness";
 import { IdManager } from "../services/IdManager";
-import { TokenManager } from "../services/TokenManager";
 import { HashManager } from "../services/HashManager";
+import { TokenManager } from "../services/TokenManager";
 import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
+import { GenericError } from "../errors/GenericError";
 
 export class AddressController {
-  constructor(
-    private tokenManager: TokenManager
-  ){}
+  
   private static AddressBusiness = new AddressBusiness(
     new AddressDatabase(),
-    new IdManager(),
+    new IdManager()
   )
 
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
-    new HashManager()
+    new HashManager(),
+    new TokenManager()
+  )
+  
+  private static StepBusiness = new StepBusiness(
+    new AddressDatabase(),
+    new AmountDatabase(),
+    new BirthdayDatabase(),
+    new CPFDatabase(),
+    new NameDatabase(),
+    new PhoneDatabase(),
   )
 
   public async insert(req: Request, res: Response) {
@@ -44,12 +59,16 @@ export class AddressController {
         throw new InvalidParameterError("Numero inválido")
       }
 
-      const userData = this.tokenManager.retrieveDataFromToken(token)
-
-      const user = AddressController.UserBusiness.getUserById(userData.id)
+      const user = await AddressController.UserBusiness.getUserById(token)
 
       if(!user){
         throw new NotFoundError("Usuário não encontrado")
+      }
+
+      const nextStep = await AddressController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
+
+      if (!nextStep) {
+        throw new GenericError("Você está na etapa errada do cadastro")
       }
 
       await AddressController.AddressBusiness.insert(
@@ -59,10 +78,13 @@ export class AddressController {
         complement,
         city,
         state,
-        userData.id
+        user.getId()
       )
 
-      res.status(200).send({message: "OK"})
+      res.status(200).send({
+        message: "OK",
+        'next-end-point': nextStep
+      })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

@@ -4,8 +4,6 @@ import { TokenManager } from "../services/TokenManager";
 
 export const phoneRouter = express.Router()
 
-const phone = new PhoneController(
-  new TokenManager()
-)
+const phone = new PhoneController()
 
 phoneRouter.post('/', phone.insert)

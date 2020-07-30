@@ -7,7 +7,7 @@ import { CPFDatabase } from "../data/CPFDatabase";
 import { NameDatabase } from "../data/NameDatabase";
 import { PhoneDatabase } from "../data/PhoneDatabase";
 import { UserDatabase } from "../data/UserDatabase";
-import { BirthdayBusiness } from "../business/BirthdayBusiness";
+import { AmountBusiness } from "../business/AmountBusiness";
 import { StepBusiness, Steps } from "../business/StepBusiness";
 import { UserBusiness } from "../business/UserBusiness";
 import { IdManager } from "../services/IdManager";
@@ -17,10 +17,10 @@ import { InvalidParameterError } from "../errors/InvalidParameterError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { GenericError } from "../errors/GenericError";
 
-export class BirthdayController {
-  
-  private static BirthdayBusiness = new BirthdayBusiness(
-    new BirthdayDatabase(),
+export class AmountController {
+
+  private static AmountBusiness = new AmountBusiness(
+    new AmountDatabase(),
     new IdManager()
   )
 
@@ -30,7 +30,7 @@ export class BirthdayController {
     new HashManager(),
     new TokenManager()
   )
-  
+
   private static StepBusiness = new StepBusiness(
     new AddressDatabase(),
     new AmountDatabase(),
@@ -42,26 +42,28 @@ export class BirthdayController {
 
   async insert(req: Request, res: Response) {
     try {
-      const { birthday, token } = req.body
+      const { amount, token } = req.body
 
-      if (!birthday || !token) {
+      if (!amount || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
+      if (isNaN(amount)) {
+        throw new InvalidParameterError("Valor solicitado inválido")
+      }
 
-      const user = await BirthdayController.UserBusiness.getUserById(token)
+      const user = await AmountController.UserBusiness.getUserById(token)
 
       if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
-      const nextStep = await BirthdayController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
+      const nextStep = await AmountController.StepBusiness.checkStep(Steps.AMOUNT, user.getId())
 
       if (!nextStep) {
         throw new GenericError("Você está na etapa errada do cadastro")
       }
 
-      // !Assumindo que data está chegando no formato YYYY-MM-DD
-      await BirthdayController.BirthdayBusiness.insert(birthday, user.getId())
+      await AmountController.AmountBusiness.insert(amount, user.getId())
 
       res.status(200).send({
         message: "OK",

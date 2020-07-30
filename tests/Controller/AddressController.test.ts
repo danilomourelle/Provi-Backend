@@ -1,10 +1,7 @@
 import { AddressController } from '../../src/controller/AddressController'
 
-// !Para testar condição de sucesso, deve-se comentar linhas de comunicação com DB e respostas associadas no arquivo do controller (49 a 63)
-
 describe("Testing AddressController.insert", () => {
-  let tokenGenerator = { retrieveDataFromToken: jest.fn().mockReturnValue('tokenResponse') };
-  const addressController = new AddressController(tokenGenerator as any)
+  const addressController = new AddressController()
 
   test("Should return 'Preencha todos os campos' for empty cep", async () => {
     const mockReq: any = {
@@ -165,28 +162,5 @@ describe("Testing AddressController.insert", () => {
 
     expect(mockRes.status).toHaveBeenCalledWith(422);
     expect(mockRes.send).toHaveBeenCalledWith({ message: "Preencha todos os campos" });
-  });
-
-  test("Should return the 'message:OK' in success", async () => {
-    const mockReq: any = {
-      body: {
-        cep: '00000-00',
-        street: "Avenida Brasil",
-        number: "123",
-        complement: '',
-        city: 'São Paulo',
-        state: 'SP',
-        token: 'token'
-      }
-    }
-    const mockRes: any = {
-      status: jest.fn().mockReturnThis(),
-      send: jest.fn().mockReturnThis()
-    }
-
-    await addressController.insert(mockReq, mockRes);
-
-    expect(mockRes.status).toHaveBeenCalledWith(200);
-    expect(mockRes.send).toHaveBeenCalledWith({ message: "OK" });
   });
 });
