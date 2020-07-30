@@ -13,7 +13,8 @@ import { NotFoundError } from "../errors/NotFoundError";
 export class AddressController {
   constructor(
     private tokenManager: TokenManager
-  ){}
+  ) { }
+
   private static AddressBusiness = new AddressBusiness(
     new AddressDatabase(),
     new IdManager(),
@@ -36,7 +37,6 @@ export class AddressController {
         state,
         token
       } = req.body
-
       if (!cep || !street || !number || !city || !state || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
@@ -44,11 +44,12 @@ export class AddressController {
         throw new InvalidParameterError("Numero inválido")
       }
 
+      console.log(this)
       const userData = this.tokenManager.retrieveDataFromToken(token)
 
       const user = AddressController.UserBusiness.getUserById(userData.id)
 
-      if(!user){
+      if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
@@ -59,10 +60,10 @@ export class AddressController {
         complement,
         city,
         state,
-        userData.id
+        'userData.id'
       )
 
-      res.status(200).send({message: "OK"})
+      res.status(200).send({ message: "OK" })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

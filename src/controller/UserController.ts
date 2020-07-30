@@ -36,11 +36,11 @@ export class UserController {
         email: user.getEmail()
       })
 
-      res.status(200).send({token})
+      res.status(200).send({ token })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });
-      
+
     } finally {
       await BaseDatabase.disconnectDB()
     }

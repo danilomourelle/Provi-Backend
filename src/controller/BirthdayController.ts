@@ -13,7 +13,7 @@ import { NotFoundError } from "../errors/NotFoundError";
 export class BirthdayController {
   constructor(
     private tokenManager: TokenManager
-  ){}
+  ) { }
   private static BirthdayBusiness = new BirthdayBusiness(
     new BirthdayDatabase(),
     new IdManager()
@@ -32,7 +32,7 @@ export class BirthdayController {
       if (!birthday || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
-      
+
       const userData = this.tokenManager.retrieveDataFromToken(token)
 
       const user = BirthdayController.UserBusiness.getUserById(userData.id)

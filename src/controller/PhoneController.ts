@@ -13,13 +13,13 @@ import { NotFoundError } from "../errors/NotFoundError";
 export class PhoneController {
   constructor(
     private tokenManager: TokenManager
-  ){}
+  ) { }
 
   private static PhoneBusiness = new PhoneBusiness(
     new PhoneDatabase(),
     new IdManager()
   )
-  
+
   private static UserBusiness = new UserBusiness(
     new UserDatabase(),
     new IdManager(),
@@ -41,7 +41,7 @@ export class PhoneController {
 
       const user = PhoneController.UserBusiness.getUserById(userData.id)
 
-      if(!user){
+      if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
@@ -50,7 +50,7 @@ export class PhoneController {
         userData.id
       )
 
-      res.status(200).send({message: "OK"})
+      res.status(200).send({ message: "OK" })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });

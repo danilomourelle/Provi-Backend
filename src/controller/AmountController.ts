@@ -32,7 +32,7 @@ export class AmountController {
       if (!amount || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
-      if(isNaN(amount)){
+      if (isNaN(amount)) {
         throw new InvalidParameterError("Valor solicitado inválido")
       }
 

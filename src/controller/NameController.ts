@@ -13,7 +13,7 @@ import { NotFoundError } from "../errors/NotFoundError";
 export class NameController {
   constructor(
     private tokenManager: TokenManager
-  ){}
+  ) { }
 
   private static NameBusiness = new NameBusiness(
     new NameDatabase(),
@@ -28,9 +28,9 @@ export class NameController {
 
   public async insert(req: Request, res: Response) {
     try {
-      const {name, token} = req.body
+      const { name, token } = req.body
 
-      if(!name || !token){
+      if (!name || !token) {
         throw new InvalidParameterError("Preencha todos os campos")
       }
 
@@ -38,13 +38,13 @@ export class NameController {
 
       const user = NameController.UserBusiness.getUserById(userData.id)
 
-      if(!user){
+      if (!user) {
         throw new NotFoundError("Usuário não encontrado")
       }
 
       await NameController.NameBusiness.insert(name, userData.id)
 
-      res.status(200).send({message: "OK"})
+      res.status(200).send({ message: "OK" })
 
     } catch (err) {
       res.status(err.errorCode || 400).send({ message: err.message });
